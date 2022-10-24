@@ -74,6 +74,15 @@ public class SetMealController {
         return R.success(SetMealDtoPage);
     }
 
+    @GetMapping("list")
+    public R<List<Setmeal>> list( Setmeal setmeal){
+        LambdaQueryWrapper<Setmeal> setmealLambdaQueryWrapper=new LambdaQueryWrapper<>();
+        setmealLambdaQueryWrapper.eq(setmeal.getCategoryId()!=null,Setmeal::getCategoryId,setmeal.getCategoryId());
+        setmealLambdaQueryWrapper.eq(setmeal.getStatus()!=0,Setmeal::getStatus,setmeal.getStatus());
+        List<Setmeal> setmealList=setmealService.list(setmealLambdaQueryWrapper);
+        return  R.success(setmealList);
+    }
+
     @DeleteMapping
     public R<String> remove(Long ids) {
 

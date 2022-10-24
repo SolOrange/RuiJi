@@ -35,6 +35,8 @@ function  addCartApi(data){
       })
 }
 
+
+
 //购物车中修改商品
 function  updateCartApi(data){
     return $axios({
@@ -57,6 +59,15 @@ function setMealDishDetailsApi(id) {
     return $axios({
         'url': `/setmeal/dish/${id}`,
         'method': 'get',
+    })
+}
+
+//获取购物车内商品的集合
+function cartListApi(data) {
+    return $axios({
+        'url': '/shoppingCart/list',
+        'method': 'get',
+        params:{...data}
     })
 }
 

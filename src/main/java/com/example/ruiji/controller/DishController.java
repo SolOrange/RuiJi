@@ -8,6 +8,7 @@ import com.example.ruiji.dto.DishDto;
 import com.example.ruiji.dto.SetmealDto;
 import com.example.ruiji.pojo.Category;
 import com.example.ruiji.pojo.Dish;
+import com.example.ruiji.pojo.DishFlavor;
 import com.example.ruiji.service.CategoryService;
 import com.example.ruiji.service.DishFlavorService;
 import com.example.ruiji.service.DishService;
@@ -89,16 +90,22 @@ public class DishController {
     }
 
     @GetMapping("list")
-    public R<List<Dish>> list(Dish dish){
-        LambdaQueryWrapper<Dish> queryWrapper=new LambdaQueryWrapper<>();
-        queryWrapper.eq(dish.getCategoryId()!=null,Dish::getCategoryId,dish.getCategoryId());
+    public R<List<DishDto>> list(Dish dish) {
+        LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(dish.getCategoryId() != null, Dish::getCategoryId, dish.getCategoryId());
         queryWrapper.orderByAsc(Dish::getSort).orderByDesc(Dish::getUpdateTime);
-        List<Dish> dishList=dishService.list(queryWrapper);
+        List<Dish> dishList = dishService.list(queryWrapper);
+        List<DishDto> dishDtoList = dishList.stream().map((item) -> {
+            DishDto dishDto = new DishDto();
+            BeanUtils.copyProperties(item, dishDto);
+            LambdaQueryWrapper<DishFlavor> flavorLambdaQueryWrapper = new LambdaQueryWrapper<>();
+            flavorLambdaQueryWrapper.eq(DishFlavor::getDishId, item.getId());
+            dishDto.setFlavors(flavorService.list(flavorLambdaQueryWrapper));
+            return dishDto;
+        }).collect(Collectors.toList());
 
-        return R.success(dishList);
+        return R.success(dishDtoList);
     }
-
-
 
 
 }

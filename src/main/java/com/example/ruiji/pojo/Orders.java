@@ -1,5 +1,6 @@
 package com.example.ruiji.pojo;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -44,6 +45,7 @@ public class Orders implements Serializable {
     /**
      * 下单时间
      */
+
     private Date orderTime;
 
     /**
